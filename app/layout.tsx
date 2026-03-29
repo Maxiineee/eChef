@@ -32,7 +32,7 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider forcedTheme="light" enableSystem={false}>
-          <SidebarProvider defaultOpen={false}>
+          <SidebarProvider>
             <TooltipProvider>
               <AppSidebar />
               <main className="w-full">
