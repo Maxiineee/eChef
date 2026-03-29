@@ -116,6 +116,9 @@
 }
 
 @layer base {
+  .tabler-icon {
+    @apply stroke-[1.5]
+  }
   * {
     @apply border-border outline-ring/50;
     }

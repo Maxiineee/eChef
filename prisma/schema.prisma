@@ -1,0 +1,258 @@
+// This is your Prisma schema file,
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Recipe {
+  id              String                   @id @default(cuid())
+  title           String
+  description     String?                  @db.Text
+  image           String
+  prepTime        Int
+  servings        Int
+  author          User                     @relation(fields: [authorId], references: [id])
+  authorId        String
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  steps           Step[]
+  ingredients     RecipeIngredient[]
+  reviews         Review[]
+  categories      RecipeCategory[]
+  tags            RecipeTag[]
+  reports         Report[]                 @relation("reportedContentRecipe")
+  inFavorites     Favorite[]
+  inShoppingLists ShoppingListIngredient[]
+}
+
+model Step {
+  id          String  @id @default(cuid())
+  description String  @db.Text
+  image       String?
+  recipe      Recipe  @relation(fields: [recipeId], references: [id])
+  recipeId    String
+  index       Int
+}
+
+model Ingredient {
+  id           String             @id @default(cuid())
+  name         String             @unique
+  recipesUsing RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  recipeId     String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+  quantity     Float
+  unit         EnumUnit
+  index        Int
+
+  @@id([recipeId, ingredientId])
+}
+
+model Review {
+  id        String       @id @default(cuid())
+  user      User         @relation(fields: [userId], references: [id])
+  userId    String
+  recipe    Recipe       @relation(fields: [recipeId], references: [id])
+  recipeId  String
+  value     Float
+  comment   String?      @db.Text
+  createdAt DateTime     @default(now())
+  likes     ReviewLike[]
+  reports   Report[]     @relation("reportedContentReview")
+}
+
+model ReviewLike {
+  review   Review @relation(fields: [reviewId], references: [id])
+  reviewId String
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+
+  @@id([reviewId, userId])
+}
+
+model Favorite {
+  id       String @id @default(cuid())
+  folder   String @default("default")
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+}
+
+model Report {
+  id               String           @id @default(cuid())
+  reason           EnumReportReason
+  user             User             @relation("reportAuthor", fields: [userId], references: [id])
+  userId           String
+  createdAt        DateTime         @default(now())
+  status           EnumReportStatus @default(pending)
+  reportedRecipe   Recipe?          @relation("reportedContentRecipe", fields: [reportedRecipeId], references: [id])
+  reportedRecipeId String?
+  reportedReview   Review?          @relation("reportedContentReview", fields: [reportedReviewId], references: [id])
+  reportedReviewId String?
+  reportedUser     User?            @relation("reportedContentUser", fields: [reportedUserId], references: [id])
+  reportedUserId   String?
+}
+
+model ShoppingListIngredient {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  ingredient String
+  quantity   Float
+  unit       EnumUnit
+  index      Int
+  recipe     Recipe?  @relation(fields: [recipeId], references: [id])
+  recipeId   String?
+  isChecked  Boolean  @default(false)
+}
+
+model Tag {
+  id           String      @id @default(cuid())
+  name         String      @unique
+  recipesUsing RecipeTag[]
+}
+
+model RecipeTag {
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+  tag      Tag    @relation(fields: [tagId], references: [id])
+  tagId    String
+
+  @@id([recipeId, tagId])
+}
+
+model Category {
+  id           String           @id @default(cuid())
+  name         String           @unique
+  recipesUsing RecipeCategory[]
+}
+
+model RecipeCategory {
+  recipe     Recipe   @relation(fields: [recipeId], references: [id])
+  recipeId   String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@id([categoryId, recipeId])
+}
+
+// Auth and User models
+
+model User {
+  id              String                   @id
+  name            String
+  username        String                   @unique
+  bio             String?
+  email           String
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  role            EnumRole                 @default(user)
+  isBanned        Boolean                  @default(false)
+  sessions        Session[]
+  accounts        Account[]
+  recipes         Recipe[]
+  reviews         Review[]
+  reviewLikes     ReviewLike[]
+  favorites       Favorite[]
+  reportsMade     Report[]                 @relation("reportAuthor")
+  reportsReceived Report[]                 @relation("reportedContentUser")
+  shoppingList    ShoppingListIngredient[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum EnumUnit {
+  g
+  kg
+  ml
+  l
+  cup
+  tableSpoon
+  teaSpoon
+  dessertSpoon
+  coffeeSpoon
+  unit
+  pinch
+  toTaste
+  drizzle
+}
+
+enum EnumReportReason {
+  abusiveOffensiveContent
+  spam
+  inappropriatePhoto
+  falseDangerousInformation
+  other
+}
+
+enum EnumReportStatus {
+  pending
+  solved
+  rejected
+}
+
+enum EnumRole {
+  user
+  admin
+}
