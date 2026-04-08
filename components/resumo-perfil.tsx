@@ -6,7 +6,7 @@ export default function ResumoPerfil(
 ) {
 
     return (
-        <Link className={"flex gap-2 items-center " + className} href={'#'}>
+        <Link className={"flex gap-2 items-center " + className} href={'/perfil/' + userId}>
             <p className="sm:text-base font-bold text-background">{username}</p>
             <Avatar>
                 <AvatarImage src={imgUrl} />

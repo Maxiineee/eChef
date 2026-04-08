@@ -2,6 +2,13 @@
 
 import prisma from "@/lib/prisma";
 import { CardReceitaData } from "@/components/card-receita";
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers";
+
+const session = await auth.api.getSession(
+    { headers: await headers() }
+)
+const userId = session?.user?.id ?? null;
 
 export async function getDestaques(category?: string): Promise<CardReceitaData[]> {
     const dataAtual = new Date();
@@ -268,7 +275,7 @@ type recipeFiltersType = {
 export async function searchRecipes(query: string, page: number = 1, filters?: recipeFiltersType): Promise<CardReceitaData[]> {
     query = query.trim();
     if (query.length === 0) return [];
-    
+
     const recipes = await prisma.recipe.findMany({
         where: {
             OR: [{

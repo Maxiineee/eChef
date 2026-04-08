@@ -20,7 +20,6 @@ function getRecipeCardVisibility(index: number) {
 
 export default async function CardsReceitasDestaques({ currentCategory }: { currentCategory?: string }) {
     const categoria = currentCategory || undefined;
-    const userId = "123"; // valor de teste
     const receitasDestaques = await getDestaques(categoria);
     return (
         receitasDestaques.map((item, index) => (
