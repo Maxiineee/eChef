@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { SidebarTrigger } from "./ui/sidebar"
 import { IconShoppingBag } from "@tabler/icons-react"
-import InputPesquisa from "./input-pesquisa"
+import InputSearch from "./input-search"
 import LogoHorizontal from "./logo-horizontal"
 import { cn } from "@/lib/utils"
 import ButtonLink from "./button-link"
@@ -35,12 +35,11 @@ function HeaderRightSide({ session }: { session: any }) {
             {/** Check if user is authenticated to conditionally show register buttons */}
             {!session ? (
                 <>
-                    <ButtonLink href="/entrar">Entrar</ButtonLink>
-                    <ButtonLink href="/registrar" variant="outline">Registrar</ButtonLink>
+                    <ButtonLink href="/login">Login</ButtonLink>
+                    <ButtonLink href="/signup" variant="outline">Signup</ButtonLink>
                 </>) : (
-                <Button className="w-18" variant="outline" onClick={handleLogout}>Sair</Button>
-            )
-            }
+                <Button className="w-18" variant="outline" onClick={handleLogout}>Logout</Button>
+            )}
             <IconShoppingBag className="size-8" />
         </div>
     )
@@ -49,7 +48,7 @@ function HeaderRightSide({ session }: { session: any }) {
 function HeaderCenter() {
     return (
         <div className="flex flex-1">
-            <InputPesquisa filters />
+            <InputSearch filters />
         </div>
     )
 }

@@ -22,15 +22,15 @@ export async function signup(
     formData: FormData,
 ): Promise<authenticateState> {
     const signupSchema = z.object({
-        name: z.string().min(3, "O nome deve conter pelo menos 3 caracteres"),
-        email: z.email("Formato de e-mail inválido"),
-        password: z.string().min(8, "A senha deve conter pelo menos 8 caracteres"),
-        passwordConfirm: z.string().min(8, "A confirmação de senha deve conter pelo menos 8 caracteres"),
+        name: z.string().min(3, "The username must be at least 3 characters long"),
+        email: z.email("Invalid email format"),
+        password: z.string().min(8, "The password must be at least 8 characters long"),
+        passwordConfirm: z.string().min(8, "The password confirmation must be at least 8 characters long"),
         role: z.enum(["user", "admin"]).default("user"),
         isBanned: z.boolean().default(false)
     })
 
-    const role = formData.get("emailInput") === "chloedev@teste.com" ? "admin" : "user"
+    const role = formData.get("emailInput") === "chloedev@test.com" ? "admin" : "user"
 
     const parsedData = signupSchema.safeParse({
         name: formData.get("usernameInput"),
@@ -43,7 +43,7 @@ export async function signup(
 
     if (!parsedData.success) {
         const errors: authenticateState["errors"] = parsedData.error.flatten().fieldErrors;
-        const message: authenticateState["message"] = "Campos faltando ou inválidos. Verifique.";
+        const message: authenticateState["message"] = "Missing or invalid fields. Please check.";
         return {
             errors,
             message,
@@ -52,7 +52,7 @@ export async function signup(
 
     if (parsedData.data.password !== parsedData.data.passwordConfirm) {
         return {
-            errors: { passwordConfirm: ["As senhas não coincidem."] },
+            errors: { passwordConfirm: ["The passwords do not match."] },
         }
     }
 
@@ -60,7 +60,7 @@ export async function signup(
         await auth.api.signUpEmail({ body: parsedData.data });
     } catch (error) {
         console.log("Error during authentication: ", error);
-        throw new Error("Ocorreu um erro ao criar a conta. Por favor, tente novamente.")
+        throw new Error("An error occurred while creating your account. Please try again.")
     }
     return {}
 }
@@ -70,7 +70,7 @@ export async function login(
     formData: FormData,
 ): Promise<authenticateState> {
     const loginSchema = z.object({
-        email: z.email("Formato de e-mail inválido"),
+        email: z.email("Invalid email format"),
         password: z.string()
     })
 
@@ -81,7 +81,7 @@ export async function login(
 
     if (!parsedData.success) {
         const errors: authenticateState["errors"] = parsedData.error.flatten().fieldErrors;
-        const message: authenticateState["message"] = "Campos faltando ou inválidos. Verifique.";
+        const message: authenticateState["message"] = "Missing or invalid fields. Please check.";
         return {
             errors,
             message,
@@ -89,12 +89,10 @@ export async function login(
     }
 
     try {
-        const result = await auth.api.signInEmail({ body: parsedData.data, headers: await headers() });
-        console.log("🟢 Login response:", JSON.stringify(result, null, 2));
+        await auth.api.signInEmail({ body: parsedData.data, headers: await headers() });
     } catch (error) {
-        console.log("🔴 Erro no login:", error);
         return {
-            message: "E-mail ou senha incorretos. Por favor, tente novamente."
+            message: "Invalid email or password. Please try again."
         }
     }
     revalidatePath("/") // Revalidate the home page to update the UI after login

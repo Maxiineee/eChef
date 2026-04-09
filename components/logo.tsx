@@ -14,7 +14,7 @@ export default function Logo({ size = "default", className }: { size?: LogoSize,
     return (
         <Image
             src={imgLogo}
-            alt="Logo do app"
+            alt="App logo"
             className={cn("w-auto", sizeClasses[size], className)} />
     )
 }

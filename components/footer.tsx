@@ -22,7 +22,7 @@ export default function Footer({ className }: { className: string }) {
             {navItems.map((item) => {
                 const isActive = item.isActive(currentPath)
 
-                if (item.href === "/criar") {
+                if (item.href === "/create") {
                     return (
                         <Link key={item.href} href={item.href} aria-label={item.label}>
                             <IconAddRecipe className={cn("size-16", isActive && "text-primary stroke-2")} />

@@ -15,7 +15,7 @@ export default function LogoHorizontal({ size = "default", className }: { size?:
     return (
         <Image
             src={imgLogoHorizontal}
-            alt="Logo do app"
+            alt="App logo"
             className={cn("w-auto", sizeClasses[size], className)}
         />
     )

@@ -1,33 +1,33 @@
-import PratoPrincipal from "@/app/assets/Prato Principal.jpg"
-import Bolo from "@/app/assets/Bolo.jpg"
-import Suco from "@/app/assets/Suco.jpg"
+import MainDish from "@/app/assets/Prato Principal.jpg"
+import Cake from "@/app/assets/Bolo.jpg"
+import Juice from "@/app/assets/Suco.jpg"
 import Pastel from "@/app/assets/Pastel.png"
 import Image from "next/image"
 import Link from "next/link"
 
-type CardCategoriaVariant = "Principais" | "Sobremesas" | "Bebidas" | "Lanches"
+type CardCategoryVariant = "Main" | "Desserts" | "Drinks" | "Snacks"
 
-export default function CardCategoria({ variant }: { variant: CardCategoriaVariant }) {
-    let titulo, img, path
+export default function CardCategory({ variant }: { variant: CardCategoryVariant }) {
+    let title, img, path
     // Paths com valores de teste
     switch (variant) {
-        case "Principais":
-            titulo = "Pratos Principais"
-            img = PratoPrincipal
+        case "Main":
+            title = "Main Dishes"
+            img = MainDish
             path = "#"
             break
-        case "Sobremesas":
-            titulo = "Sobremesas e Confeitarias"
-            img = Bolo
+        case "Desserts":
+            title = "Desserts"
+            img = Cake
             path = "#"
             break
-        case "Bebidas":
-            titulo = "Bebidas"
-            img = Suco
+        case "Drinks":
+            title = "Drinks"
+            img = Juice
             path = "#"
             break
-        case "Lanches":
-            titulo = "Lanches"
+        case "Snacks":
+            title = "Snacks"
             img = Pastel
             path = "#"
             break
@@ -37,13 +37,13 @@ export default function CardCategoria({ variant }: { variant: CardCategoriaVaria
             <Link href={path}>
                 <Image
                     src={img}
-                    alt={titulo}
+                    alt={title}
                     fill
                     className="object-cover brightness-50"
                 />
                 <div className="absolute w-full h-full flex items-center justify-center">
                     <h2 className="text-xl font-bold text-background text-center">
-                        {titulo}
+                        {title}
                     </h2>
                 </div>
             </Link>

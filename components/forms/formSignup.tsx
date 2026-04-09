@@ -9,22 +9,22 @@ import { useActionState, useState } from "react";
 import { signup, authenticateState } from "@/lib/actions"
 import ButtonLink from "../button-link";
 
-export default function FormRegistrar() {
+export default function FormSignup() {
     const initialState: authenticateState = { message: null, errors: {} };
     const [state, formAction, isPending] = useActionState(signup, initialState)
-    
+
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordConfirm, setPasswordConfirm] = useState("")
-    
+
     return (
         <form action={formAction}>
             <FieldGroup className="flex flex-col gap-4">
                 <Field>
-                    <FieldLabel htmlFor="usernameInput" className="text-foreground">Nome de usuário</FieldLabel>
+                    <FieldLabel htmlFor="usernameInput" className="text-foreground">Username</FieldLabel>
                     <InputGroup>
-                        <InputGroupInput id="usernameInput" name="usernameInput" type="text" placeholder="Crie seu nome de usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <InputGroupInput id="usernameInput" name="usernameInput" type="text" placeholder="Create your username" value={username} onChange={(e) => setUsername(e.target.value)} />
                         <InputGroupAddon align="inline-start">
                             <IconUser className="text-muted-foreground" />
                         </InputGroupAddon>
@@ -40,7 +40,7 @@ export default function FormRegistrar() {
                 <Field>
                     <FieldLabel htmlFor="emailInput" className="text-foreground">E-mail</FieldLabel>
                     <InputGroup>
-                        <InputGroupInput id="emailInput" name="emailInput"  placeholder="email@exemplo.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <InputGroupInput id="emailInput" name="emailInput" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <InputGroupAddon align="inline-start">
                             <IconMail className="text-muted-foreground" />
                         </InputGroupAddon>
@@ -55,9 +55,9 @@ export default function FormRegistrar() {
                         )}
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="passwordInput" className="text-foreground">Senha</FieldLabel>
+                    <FieldLabel htmlFor="passwordInput" className="text-foreground">Password</FieldLabel>
                     <InputGroup>
-                        <InputGroupInput id="passwordInput" name="passwordInput" type="password" placeholder="Mínimo de 8 dígitos" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <InputGroupInput id="passwordInput" name="passwordInput" type="password" placeholder="At least 8 characters long" value={password} onChange={(e) => setPassword(e.target.value)} />
                         <InputGroupAddon align="inline-start">
                             <IconLockPassword className="text-muted-foreground" />
                         </InputGroupAddon>
@@ -72,9 +72,9 @@ export default function FormRegistrar() {
                         )}
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="passwordConfirmInput" className="text-foreground">Confirmar senha</FieldLabel>
+                    <FieldLabel htmlFor="passwordConfirmInput" className="text-foreground">Confirm your password</FieldLabel>
                     <InputGroup>
-                        <InputGroupInput id="passwordConfirmInput" name="passwordConfirmInput" type="password" placeholder="Confirme sua senha" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                        <InputGroupInput id="passwordConfirmInput" name="passwordConfirmInput" type="password" placeholder="Confirm your password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
                         <InputGroupAddon align="inline-start">
                             <IconLockPassword className="text-muted-foreground" />
                         </InputGroupAddon>
@@ -91,17 +91,17 @@ export default function FormRegistrar() {
                 </Field>
                 {state.message && <div className="text-red-500 text-sm">{state.message}</div>}
                 <div className="w-full text-end">
-                    <Link href='#' className="text-foreground">Esqueceu a senha? <span className="text-primary">Clique aqui</span></Link>
+                    <Link href='#' className="text-foreground">Forgot your password? <span className="text-primary">Click here</span></Link>
                 </div>
 
-                <Button className="hover:cursor-pointer" type="submit" disabled={isPending}>Criar conta</Button>
+                <Button className="hover:cursor-pointer" type="submit" disabled={isPending}>Create account</Button>
                 <Button variant="outline" className="hover:cursor-pointer">
-                    <IconBrandGoogle data-icon="inline-start" />Entrar com Google
+                    <IconBrandGoogle data-icon="inline-start" />Login with Google
                 </Button>
                 <div className="w-full text-center">
-                    <Link href='/entrar' className="text-foreground">Já tem uma conta? <span className="text-primary">Faça login!</span></Link>
+                    <Link href='/login' className="text-foreground">Already have an account? <span className="text-primary">Log in!</span></Link>
                 </div>
-                <ButtonLink href="/" variant="outline" className="border-primary hover:cursor-pointer">Continuar sem conta</ButtonLink>
+                <ButtonLink href="/" variant="outline" className="border-primary hover:cursor-pointer">Continue without an account</ButtonLink>
             </FieldGroup>
         </form>
     );

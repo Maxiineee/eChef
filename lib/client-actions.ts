@@ -8,6 +8,6 @@ export async function logout() {
     }
     catch (error) {
         console.log("Error during logout: ", error);
-        throw new Error("Ocorreu um erro ao sair da conta. Por favor, tente novamente.")
+        throw new Error("An error occurred while logging out. Please try again.")
     }
 }

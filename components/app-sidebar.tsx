@@ -21,12 +21,12 @@ export default function AppSidebar({ className, session }: { className?: string,
         <Sidebar className={className}>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Navegacao</SidebarGroupLabel>
+                    <SidebarGroupLabel>Navigation</SidebarGroupLabel>
                     <SidebarMenu>
                         {navItems.map((item) => {
                             const isActive = item.isActive(currentPath)
 
-                            if (item.label === "Perfil" && !session?.user) {
+                            if (item.label === "Profile" && !session?.user) {
                                 return null
                             }
 

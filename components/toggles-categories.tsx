@@ -4,17 +4,17 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const categoryList = [
-    { txt: "Café da manhã" },
-    { txt: "Almoço" },
-    { txt: "Jantar" },
-    { txt: "Lanche" },
-    { txt: "Sobremesas" }
+    { txt: "Breakfast" },
+    { txt: "Lunch" },
+    { txt: "Dinner" },
+    { txt: "Snacks" },
+    { txt: "Desserts" }
 ]
 
-export default function TogglesCategorias() {
+export default function TogglesCategories() {
     const searchParams = useSearchParams();
     const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get("category") ?? null);
-    
+
     const pathname = usePathname();
     const { replace } = useRouter();
 

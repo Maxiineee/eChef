@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from "@/lib/prisma";
-import { CardReceitaData } from "@/components/card-receita";
+import { CardRecipeData } from "@/components/card-recipe";
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers";
 
@@ -13,32 +13,30 @@ async function getUserId() {
     return userId;
 }
 
-export async function getDestaques(category?: string): Promise<CardReceitaData[]> {
+export async function getBest(category?: string): Promise<CardRecipeData[]> {
     const userId = await getUserId();
-    const dataAtual = new Date();
-    const primeiroDiaDoMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
     let testImgUrl = "https://www.sabornamesa.com.br/media/k2/items/cache/bf1e20a4462b71e3cc4cece2a8c96ac8_XL.jpg"
 
     switch (category) {
-        case "Café da manhã":
+        case "Breakfast":
             testImgUrl = "https://catracalivre.com.br/wp-content/uploads/2023/12/istock-155388694-1.jpg";
             break;
-        case "Almoço":
+        case "Lunch":
             testImgUrl = "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/spaghetti_and_meatballs_69603_16x9.jpg";
             break;
-        case "Jantar":
+        case "Dinner":
             testImgUrl = "https://static01.nyt.com/images/2023/08/31/multimedia/RS-Lasagna-hkjl/RS-Lasagna-hkjl-threeByTwoMediumAt2X.jpg";
             break;
-        case "Lanche":
+        case "Snacks":
             testImgUrl = "https://storage.googleapis.com/imagens_videos_gou_cooking_prod/production/mesas/2019/11/1acdc8cb-croissant-_-tm-croissant-folhados-brioches-_-claudia-rezende-_-6605-baixa-3.jpg";
             break;
-        case "Sobremesas":
+        case "Desserts":
             testImgUrl = "https://static.toiimg.com/thumb/53096885.cms?imgsize=1572013&width=800&height=800";
             break;
     }
-
-    console.log("Fetch categoria: " + category)
 
     // Valores de teste por enquanto, integração com BD logo abaixo, só falta fazer seed no BD
 
@@ -46,60 +44,60 @@ export async function getDestaques(category?: string): Promise<CardReceitaData[]
         id: "1234-abcd-teste",
         imgUrl: testImgUrl,
         media: 4.5,
-        titulo: "Teste - Pizza de Calabresa",
-        avaliado: true,
-        salvo: false,
+        title: "Test - Peperroni Pizza",
+        reviewed: true,
+        saved: false,
         author: {
             id: "123",
             name: "usuario_teste",
             imgUrl: "https://avatars.githubusercontent.com/u/12345678?v=4"
         },
-        categorias: ["Almoço", "Jantar", "Lanche"]
+        categories: ["Lunch", "Dinner", "Snacks"]
     }, {
         id: "5678-efgh-teste",
         imgUrl: testImgUrl,
         media: 2.0,
-        titulo: "Teste - Bolo de Chocolate",
-        avaliado: false,
-        salvo: true,
+        title: "Test - Chocolate Cake",
+        reviewed: false,
+        saved: true,
         author: {
             id: "456",
             name: "outro_usuario",
             imgUrl: "https://avatars.githubusercontent.com/u/87654321?v=4"
         },
-        categorias: ["Sobremesas"]
+        categories: ["Desserts"]
     }, {
         id: "9012-ijkl-teste",
         imgUrl: testImgUrl,
         media: 3.8,
-        titulo: "Teste - Salada Caesar",
-        avaliado: true,
-        salvo: true,
+        title: "Test - Caesar Salad",
+        reviewed: true,
+        saved: true,
         author: {
             id: "789",
             name: "terceiro_usuario",
             imgUrl: "https://avatars.githubusercontent.com/u/11223344?v=4"
         },
-        categorias: ["Almoço", "Lanche"]
+        categories: ["Lunch", "Snacks"]
     }, {
         id: "3456-mnop-teste",
         imgUrl: testImgUrl,
         media: 4.2,
-        titulo: "Teste - Panqueca de Banana",
-        avaliado: false,
-        salvo: false,
+        title: "Test - Banana Pancake",
+        reviewed: false,
+        saved: false,
         author: {
             id: "321",
             name: "quarto_usuario",
             imgUrl: "https://avatars.githubusercontent.com/u/44332211?v=4"
         },
-        categorias: ["Café da manhã", "Sobremesas"]
+        categories: ["Breakfast", "Desserts"]
     }]
 
     const dataRecipes = await prisma.recipe.findMany({
         where: {
             createdAt: {
-                gte: primeiroDiaDoMes,
+                gte: firstDayOfMonth,
             },
             ...(category ? {
                 recipe: {
@@ -171,10 +169,10 @@ export async function getDestaques(category?: string): Promise<CardReceitaData[]
             id: recipe.id,
             imgUrl: recipe.image,
             media: media,
-            titulo: recipe.title,
-            categorias: categories,
-            avaliado: isLiked,
-            salvo: isSaved,
+            title: recipe.title,
+            categories: categories,
+            reviewed: isLiked,
+            saved: isSaved,
             author: {
                 id: recipe.author.id,
                 name: recipe.author.name,
@@ -182,12 +180,12 @@ export async function getDestaques(category?: string): Promise<CardReceitaData[]
             },
         };
     })
-        .filter((item): item is CardReceitaData => item !== null);
+        .filter((item): item is CardRecipeData => item !== null);
 
     return finalData;
 }
 
-export async function searchRecipesByIngredients(ingredients: string[], page: number = 1): Promise<CardReceitaData[]> {
+export async function searchRecipesByIngredients(ingredients: string[], page: number = 1): Promise<CardRecipeData[]> {
     const userId = await getUserId();
     const recipes = await prisma.recipe.findMany({
         where: {
@@ -254,10 +252,10 @@ export async function searchRecipesByIngredients(ingredients: string[], page: nu
             id: recipe.id,
             imgUrl: recipe.image,
             media: media,
-            titulo: recipe.title,
-            categorias: categories,
-            avaliado: isLiked,
-            salvo: isSaved,
+            title: recipe.title,
+            categories: categories,
+            reviewed: isLiked,
+            saved: isSaved,
             author: {
                 id: recipe.author.id,
                 name: recipe.author.name,
@@ -277,7 +275,7 @@ type recipeFiltersType = {
     rating?: number;
 }
 
-export async function searchRecipes(query: string, page: number = 1, filters?: recipeFiltersType): Promise<CardReceitaData[]> {
+export async function searchRecipes(query: string, page: number = 1, filters?: recipeFiltersType): Promise<CardRecipeData[]> {
     const userId = await getUserId();
     query = query.trim();
     if (query.length === 0) return [];
@@ -412,10 +410,10 @@ export async function searchRecipes(query: string, page: number = 1, filters?: r
             id: recipe.id,
             imgUrl: recipe.image,
             media: media,
-            titulo: recipe.title,
-            categorias: categories,
-            avaliado: isLiked,
-            salvo: isSaved,
+            title: recipe.title,
+            categories: categories,
+            reviewed: isLiked,
+            saved: isSaved,
             author: {
                 id: recipe.author.id,
                 name: recipe.author.name,
