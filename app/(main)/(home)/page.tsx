@@ -8,12 +8,12 @@ import { headers } from "next/headers"
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
   const currentCategory = (await searchParams).category;
-  const session = await auth.api.getSession({ headers: await headers() })
+  const isAuthenticated = !! (await auth.api.getSession({ headers: await headers() }));
   return (
     <div className="flex w-full max-w-480 flex-col gap-3 sm:gap-6 mx-auto sm:mb-3 sm:px-6 px-3">
       <SectionBest currentCategory={currentCategory} />
       <Separator />
-      {!session &&
+      {!isAuthenticated &&
         <>
           <SectionCTA />
           <Separator />

@@ -1,10 +1,10 @@
-import CardRecipeImage from "./card-recipe-image";
+import { Suspense } from "react";
 import { getRecipeDetails, getUserId } from "@/lib/data-crud";
 import { IconBowl, IconCalendar, IconClock } from "@tabler/icons-react";
-import { Suspense } from "react";
 import { BadgesCategories } from "@/components/card-recipe";
 import { Separator } from "@/components/ui/separator";
 import ProfileSummary from "@/components/profile-summary";
+import CardRecipeImage from "./card-recipe-image";
 
 export default async function SectionRecipeDetails({ recipeId }: { recipeId: string }) {
     const data = await getRecipeDetails(recipeId);

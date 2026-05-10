@@ -21,14 +21,8 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  const session = await auth.api.getSession({
-    headers: await headers() // Pass the request headers to getSession
-  })
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const isAuthenticated = !!(await auth.api.getSession({ headers: await headers() }));
   return (
     <html
       lang="en"
@@ -39,7 +33,7 @@ export default async function RootLayout({
         <ThemeProvider forcedTheme="light" enableSystem={false}>
           <SidebarProvider>
             <TooltipProvider>
-              <AppSidebar session={session} />
+              <AppSidebar isAuthenticated={isAuthenticated} />
               <main className="w-full">
                 {children}
               </main>

@@ -14,7 +14,7 @@ import {
     SidebarMenuItem,
 } from "./ui/sidebar"
 
-export default function AppSidebar({ className, session }: { className?: string, session: any }) {
+export default function AppSidebar({ className, isAuthenticated }: { className?: string, isAuthenticated: boolean }) {
     const currentPath = usePathname()
 
     return (
@@ -26,7 +26,7 @@ export default function AppSidebar({ className, session }: { className?: string,
                         {navItems.map((item) => {
                             const isActive = item.isActive(currentPath)
 
-                            if (item.label === "Profile" && !session?.user) {
+                            if (item.label === "Profile" && !isAuthenticated) {
                                 return null
                             }
 

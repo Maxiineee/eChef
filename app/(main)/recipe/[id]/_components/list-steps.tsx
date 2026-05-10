@@ -1,9 +1,9 @@
 'use client'
-import ButtonSteps from "@/app/(main)/recipe/[id]/_components/button-steps";
-import { RecipeStepData } from "@/lib/data-crud";
-import { IconArrowDownCircle } from "@tabler/icons-react";
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
+import { RecipeStepData } from "@/lib/data-crud";
+import ButtonSteps from "@/app/(main)/recipe/[id]/_components/button-steps";
+import { IconArrowDownCircle } from "@tabler/icons-react";
 
 export default function ListSteps({ steps }: { steps: RecipeStepData[] }) {
     const [checkedButtons, setCheckedButtons] = useState<string[]>([])

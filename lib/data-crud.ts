@@ -102,7 +102,7 @@ export async function getBest(category?: string): Promise<RecipeCardData[]> {
         },
         categories: ["Dessert", "Snacks"]
     }, {
-         id: "1234-abcd-test",
+        id: "1234-abcd-test",
         imgUrl: testImgUrl,
         avgRating: 4.5,
         title: "Test - Lemon Pie",
@@ -115,7 +115,7 @@ export async function getBest(category?: string): Promise<RecipeCardData[]> {
         },
         categories: ["Dessert", "Snacks"]
     }, {
-         id: "1234-abcd-test",
+        id: "1234-abcd-test",
         imgUrl: testImgUrl,
         avgRating: 4.5,
         title: "Test - Lemon Pie",
@@ -707,6 +707,26 @@ export async function getRecipeSteps(id: string): Promise<RecipeStepData[]> {
         id: "123-step-1",
         description: "Add the butter, half a can of table cream and the baking powder to the well. Then mix all the ingredients by hand, until you get a smooth dough that doesn't stick to your hands.",
         index: 1,
+    }, {
+        id: "123-step-2",
+        description: "Wrap the dough in plastic wrap or place it in a closed recipient. Leave it to rest in the fridge for 30 minutes, to make it firmer and easier to handle.",
+        index: 2,
+    }, {
+        id: "123-step-3",
+        description: "Grease and flour a circular oven pan. Then, roll out the dough, pressing it with your hands, to cover the entire pan. Try to keep an even thickness. Finally, prick the entire base with a fork and bake in a preheated oven at 200°C (400°F) for about 25 minutes.",
+        index: 3,
+    }, {
+        id: "123-step-4",
+        description: "For the lemon filling: Add a can of condensed milk, half a can of table cream and the juice of about 3 or 4 lemons to a recipient. Mix everything until you get a smooth cream.",
+        index: 4,
+    }, {
+        id: "123-step-5",
+        description: "With your filling ready, add it to the dough and spread it with a spoon. Leave the pie to rest in the fridge for about 30 minutes.",
+        index: 5,
+    }, {
+        id: "123-step-6",
+        description: "Extra tips: if your cream is too sweet, add more lemon juice. If it's too runny, add some more condensed milk.",
+        index: 6,
     }]
 
     /** Test data for now. Integration with BD right below 
@@ -780,7 +800,7 @@ export async function getRecipeReviews(id: string): Promise<RecipeReviewData[] |
     }, {
         id: "review-3",
         value: 5,
-        createdAt: new Date (2026, 2, 18),
+        createdAt: new Date(2026, 2, 18),
         likes: 0,
         liked: false,
         author: {
@@ -856,14 +876,14 @@ export async function likeReview(id: string) {
 }
 
 export async function unlikeReview(id: string) {
-     //Todo: add unlike review logic
+    //Todo: add unlike review logic
     console.log("Review unliked: " + id)
 }
 
 export async function saveRecipe(id: string, folder?: string) {
-     //Todo: add save recipe logic
+    //Todo: add save recipe logic
     console.log("Review saved: " + id)
-} 
+}
 
 export async function unsaveRecipe(id: string) {
     //Todo: add unsave recipe logic

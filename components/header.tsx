@@ -1,24 +1,27 @@
 'use client'
 
 import { useRouter, usePathname } from "next/navigation"
-import { SidebarTrigger } from "./ui/sidebar"
+import Link from "next/link"
+import { signout } from "@/lib/actions"
+import { cn } from "@/lib/utils"
 import { IconShoppingBag } from "@tabler/icons-react"
+import { SidebarTrigger } from "./ui/sidebar"
+import { Button } from "./ui/button"
 import InputSearch from "./input-search"
 import LogoHorizontal from "./logo-horizontal"
-import { cn } from "@/lib/utils"
 import ButtonLink from "./button-link"
-import { Button } from "./ui/button"
-import { signout } from "@/lib/actions"
 
 function HeaderLeftSide() {
     return (
         <div className="flex items-center gap-6">
             <SidebarTrigger />
-            <LogoHorizontal />
+            <Link href="/">
+                <LogoHorizontal />
+            </Link>
         </div>)
 }
 
-function HeaderRightSide({ session }: { session: any }) {
+function HeaderRightSide({ isAuthenticated }: { isAuthenticated: boolean }) {
     const router = useRouter()
 
     const handleSignout = async () => {
@@ -33,13 +36,16 @@ function HeaderRightSide({ session }: { session: any }) {
     return (
         <div className="flex items-center gap-6">
             {/** Check if user is authenticated to conditionally show register buttons */}
-            {!session ? (
-                <>
-                    <ButtonLink href="/signin">Sign in</ButtonLink>
-                    <ButtonLink href="/signup" variant="outline">Sign up</ButtonLink>
-                </>) : (
-                <Button className="w-18" variant="outline" onClick={handleSignout}>Sign out</Button>
-            )}
+            <div className={cn("flex gap-6")}>
+                {isAuthenticated ? (
+                    <Button className="w-18" variant="outline" onClick={handleSignout}>Sign out</Button>
+                ) : (
+                    <>
+                        <ButtonLink href="/signin" >Sign in</ButtonLink>
+                        <ButtonLink href="/signup" variant="outline">Sign up</ButtonLink>
+                    </>
+                )}
+            </div>
             <IconShoppingBag className="size-8" />
         </div>
     )
@@ -62,12 +68,12 @@ function HeaderCenter() {
     )
 }
 
-export default function Header({ className, session }: { className?: string; session: any }) {
+export default function Header({ className, isAuthenticated = false }: { className?: string, isAuthenticated: boolean }) {
     return (
         <header className={cn("flex w-full gap-6 items-center", className)}>
             <HeaderLeftSide />
             <HeaderCenter />
-            <HeaderRightSide session={session} />
+            <HeaderRightSide isAuthenticated={isAuthenticated} />
         </header>
     )
 }
