@@ -2,7 +2,7 @@ import Link from "next/link"
 import TogglesCategory from "@/app/(main)/(home)/_components/toggles-categories"
 import CardsRecipesBest from "@/app/(main)/(home)/_components/cards-recipes-best"
 
-export default function SectionDestaques({ currentCategory }: { currentCategory?: string }) {
+export default function SectionBest({ currentCategory }: { currentCategory?: string }) {
     return (
         <section className="flex flex-col sm:items-center gap-3 sm:gap-6">
             <h2 className="text-2xl font-semibold text-foreground">Discover the month's best</h2>
